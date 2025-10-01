@@ -54,3 +54,13 @@ NOTE: this panic happened after few successful iterations of the loop repeating 
 
 `cargo 1.90.0 (840b83a10 2025-07-30)`
 `rustc 1.90.0 (1159e78c4 2025-09-14)`
+
+## WASM reduction
+
+To reduce the WASM binary, I used `wasm-reduce` from https://github.com/WebAssembly/binaryen
+```
+cp host/guest.wasm host/guest.orig.wasm
+(cd host && wasm-reduce guest.orig.wasm '--command=bash ./predicate.wasm-reduce.sh t.wasm' --test t.wasm --working w.wasm -f --timeout 5)
+cp host/w.wasm host/guest.reduced.wasm
+```
+

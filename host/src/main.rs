@@ -8,6 +8,8 @@ fn main() -> Result<(), Box<dyn Error>> {
     let arg_y = std::env::args().nth(4).unwrap().parse()?;
     let arg_z = std::env::args().nth(5).unwrap().parse()?;
 
+    let wasm = std::env::args().nth(6).unwrap_or("guest.wasm".to_string());
+
     let engine = Engine::new(Config::default()
         .gc_support(true)
         .wasm_gc(true)
@@ -20,7 +22,7 @@ fn main() -> Result<(), Box<dyn Error>> {
         )
     )?;
 
-    let module = Module::from_file(&engine, "guest.wasm")?;
+    let module = Module::from_file(&engine, wasm)?;
     let mut linker = Linker::new(&engine);
     linker.func_wrap("wasi_snapshot_preview1", "random_get", |_: i32, _: i32| -> i32 { return 5 })?; // Errno::Io
 
